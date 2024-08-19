@@ -25,11 +25,13 @@ class MainActivity : AppCompatActivity() {
     private var isRunning = false
     private lateinit var spinnerTasks: Spinner
 
+
     private var taskList = mutableListOf(
         Subtareas("Task 1"),
         Subtareas("Task 2"),
         Subtareas("Task 3")
     )
+
 
     private var selectedTask: Subtareas? = null
 
