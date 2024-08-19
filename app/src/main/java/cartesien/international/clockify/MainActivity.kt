@@ -8,11 +8,13 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import android.os.Handler
 import android.os.Looper
+import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.Spinner
 import android.widget.TextView
 import android.widget.AdapterView
+import java.util.Locale
 
 class MainActivity : AppCompatActivity() {
 
@@ -33,7 +35,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
+        //enableEdgeToEdge()
         setContentView(R.layout.activity_main)
 
         textViewChronometer = findViewById(R.id.textViewChronometer)
@@ -41,12 +43,16 @@ class MainActivity : AppCompatActivity() {
         val startButton: Button = findViewById(R.id.startButton)
         val stopButton: Button = findViewById(R.id.stopButton)
 
-        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, taskList.map { it.getTitlee() })
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        val adapter = MyAdapter(this, taskList)
+        //val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, taskList.map { it.getTitlee() })
+        //adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinnerTasks.adapter = adapter
 
         spinnerTasks.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>?, view: android.view.View?, position: Int, id: Long) {
+            /*override fun onItemSelected(parent: AdapterView<*>?, view: android.view.View?, position: Int, id: Long) {
+                selectedTask = taskList[position]
+            }*/
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 selectedTask = taskList[position]
             }
 
@@ -82,9 +88,10 @@ class MainActivity : AppCompatActivity() {
                     taskList[index] = updatedTask
 
                     // Actualiza el Spinner para reflejar los cambios
-                    (spinnerTasks.adapter as ArrayAdapter<*>).notifyDataSetChanged()
+                    (spinnerTasks.adapter as MyAdapter).notifyDataSetChanged()
+                    //(spinnerTasks.adapter as ArrayAdapter<*>).notifyDataSetChanged()
 
-                    println("Duración de '${it.getTitlee()}' actualizada a ${it.getDuracionn()} segundos")
+                    //println("Duración de '${it.getTitlee()}' actualizada a ${it.getDuracionn()} segundos")
                 }
             }
         }
@@ -100,7 +107,8 @@ class MainActivity : AppCompatActivity() {
     private fun updateTextView() {
         val minutes = seconds / 60
         val secs = seconds % 60
-        textViewChronometer.text = String.format("%02d:%02d", minutes, secs)
+        textViewChronometer.text = String.format(Locale.US, "%02d:%02d", minutes, secs)
+        //textViewChronometer.text = String.format("%02d:%02d", minutes, secs)
     }
 
     private fun startChronometer() {
